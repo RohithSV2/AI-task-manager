@@ -1,10 +1,13 @@
 # 🚀 CloudTask AI - Cloud-Native AI Task Management Platform
 
 [![CI/CD Pipeline](https://github.com/RohithSV2/AI-task-manager/actions/workflows/deploy.yml/badge.svg)](https://github.com/RohithSV2/AI-task-manager/actions/workflows/deploy.yml)
-[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-000000?style=flat&logo=vercel&logoColor=white)](https://ai-task-manager-rohithsv2.vercel.app)
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-000000?style=flat&logo=vercel&logoColor=white)](https://ai-task-manager-nine-eta.vercel.app)
 [![AWS Serverless Ready](https://img.shields.io/badge/AWS-Serverless%20Architecture-FF9900?style=flat&logo=amazon-aws&logoColor=white)](./CLOUD_ARCHITECTURE.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Next.js 14](https://img.shields.io/badge/Next.js-14.2-black?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
+
+**Live Production Deployment:** [https://ai-task-manager-nine-eta.vercel.app](https://ai-task-manager-nine-eta.vercel.app)  
+**GitHub Repository:** [https://github.com/RohithSV2/AI-task-manager](https://github.com/RohithSV2/AI-task-manager)
 
 An enterprise-grade, cloud-native **AI Task Management Platform** engineered specifically for **Cloud Computing & DevOps** projects. Features serverless microservices, Google Gemini LLM prompt engineering, Eisenhower Matrix auto-prioritization, real-time cloud telemetry observability, and automated GitHub Actions CI/CD to Vercel.
 
