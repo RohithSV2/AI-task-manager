@@ -145,34 +145,34 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/40 backdrop-blur-sm overflow-y-auto">
+      <div className="relative w-full max-w-xl bg-white border border-[#E8E4DA] rounded-2xl shadow-warm-lg overflow-hidden my-8">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/40">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[#F1EDE4] bg-[#FAF9F6]">
           <div className="flex items-center gap-2">
-            <h3 className="text-base font-bold text-white">
-              {task ? 'Edit Task' : 'Create New Task'}
+            <h3 className="text-sm font-bold text-stone-900">
+              {task ? 'Edit Task Details' : 'Create New Task'}
             </h3>
             {formData.aiSuggested && (
-              <span className="flex items-center gap-1 text-[11px] text-purple-400 bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 rounded-full">
-                <Sparkles className="w-3 h-3" /> AI Assisted
+              <span className="flex items-center gap-1 text-[10px] text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full font-medium">
+                <Sparkles className="w-2.5 h-2.5" /> AI Assisted
               </span>
             )}
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+            className="p-1 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-[#F1EDE4] transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
           {/* Title */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
-              Task Title *
+            <label className="block text-xs font-semibold text-stone-700 mb-1">
+              Title *
             </label>
             <input
               type="text"
@@ -180,34 +180,34 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               value={formData.title || ''}
               onChange={(e) => handleFieldChange('title', e.target.value)}
               placeholder="e.g. Design presentation slides for product launch"
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
+              className="w-full bg-[#FAF9F6] border border-[#E5E0D4] rounded-xl px-3.5 py-2 text-xs sm:text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-stone-400/30 focus:border-stone-500 transition-all"
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-stone-700 mb-1">
               Description & Notes
             </label>
             <textarea
-              rows={3}
+              rows={2}
               value={formData.description || ''}
               onChange={(e) => handleFieldChange('description', e.target.value)}
               placeholder="Add key goals, reference links, and acceptance criteria..."
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all resize-none"
+              className="w-full bg-[#FAF9F6] border border-[#E5E0D4] rounded-xl px-3.5 py-2 text-xs sm:text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-stone-400/30 focus:border-stone-500 transition-all resize-none"
             />
           </div>
 
           {/* Grid Attributes */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-stone-700 mb-1">
                 Category
               </label>
               <select
                 value={formData.category || 'Work'}
                 onChange={(e) => handleFieldChange('category', e.target.value as TaskCategory)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full bg-[#FAF9F6] border border-[#E5E0D4] rounded-xl px-3 py-2 text-xs text-stone-900 focus:outline-none focus:ring-1 focus:ring-stone-400"
               >
                 <option value="Work">Work</option>
                 <option value="Personal">Personal</option>
@@ -219,13 +219,13 @@ export const TaskModal: React.FC<TaskModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-stone-700 mb-1">
                 Priority
               </label>
               <select
                 value={formData.priority || 'medium'}
                 onChange={(e) => handleFieldChange('priority', e.target.value as Priority)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full bg-[#FAF9F6] border border-[#E5E0D4] rounded-xl px-3 py-2 text-xs text-stone-900 focus:outline-none focus:ring-1 focus:ring-stone-400"
               >
                 <option value="low">Low Priority</option>
                 <option value="medium">Medium Priority</option>
@@ -235,13 +235,13 @@ export const TaskModal: React.FC<TaskModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Current Status
+              <label className="block text-xs font-semibold text-stone-700 mb-1">
+                Status
               </label>
               <select
                 value={formData.status || 'todo'}
                 onChange={(e) => handleFieldChange('status', e.target.value as TaskStatus)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full bg-[#FAF9F6] border border-[#E5E0D4] rounded-xl px-3 py-2 text-xs text-stone-900 focus:outline-none focus:ring-1 focus:ring-stone-400"
               >
                 <option value="backlog">Backlog</option>
                 <option value="todo">To Do</option>
@@ -252,33 +252,33 @@ export const TaskModal: React.FC<TaskModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-stone-700 mb-1">
                 Due Date
               </label>
               <input
                 type="date"
                 value={formData.dueDate || ''}
                 onChange={(e) => handleFieldChange('dueDate', e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full bg-[#FAF9F6] border border-[#E5E0D4] rounded-xl px-3 py-1.5 text-xs text-stone-900 focus:outline-none focus:ring-1 focus:ring-stone-400"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Project / Initiative
+              <label className="block text-xs font-semibold text-stone-700 mb-1">
+                Project / Tag
               </label>
               <input
                 type="text"
                 value={formData.project || ''}
                 onChange={(e) => handleFieldChange('project', e.target.value)}
-                placeholder="e.g. Q4 Growth, Personal Fitness"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                placeholder="e.g. Q4 Growth, Fitness"
+                className="w-full bg-[#FAF9F6] border border-[#E5E0D4] rounded-xl px-3 py-2 text-xs text-stone-900 focus:outline-none focus:ring-1 focus:ring-stone-400"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Estimated Hours
+              <label className="block text-xs font-semibold text-stone-700 mb-1">
+                Estimated Duration (Hours)
               </label>
               <input
                 type="number"
@@ -286,54 +286,54 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 step="0.5"
                 value={formData.estimatedHours || 1}
                 onChange={(e) => handleFieldChange('estimatedHours', parseFloat(e.target.value))}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full bg-[#FAF9F6] border border-[#E5E0D4] rounded-xl px-3 py-2 text-xs text-stone-900 focus:outline-none focus:ring-1 focus:ring-stone-400"
               />
             </div>
           </div>
 
           {/* Subtasks Section with AI Breakdown */}
-          <div className="pt-2 border-t border-slate-800">
+          <div className="pt-2 border-t border-[#F1EDE4]">
             <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-semibold text-slate-200">
+              <label className="text-xs font-semibold text-stone-700">
                 Action Steps ({formData.subtasks?.length || 0})
               </label>
               <button
                 type="button"
                 onClick={handleAIBreakdown}
                 disabled={isBreakingDown || !formData.title}
-                className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow disabled:opacity-50 transition-all"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-medium bg-[#F6F4EE] hover:bg-[#ECE8DD] text-stone-800 border border-[#EAE5DA] transition-all disabled:opacity-40"
               >
                 {isBreakingDown ? (
                   <>
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <Loader2 className="w-3 h-3 animate-spin text-amber-600" />
                     <span>AI Generating...</span>
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>AI Auto-Breakdown</span>
+                    <Sparkles className="w-3 h-3 text-amber-600" />
+                    <span>AI Breakdown</span>
                   </>
                 )}
               </button>
             </div>
 
             {/* List */}
-            <div className="space-y-1.5 mb-3">
+            <div className="space-y-1.5 mb-2.5">
               {(formData.subtasks || []).map((sub) => (
                 <div
                   key={sub.id}
-                  className="flex items-center justify-between gap-2 p-2 rounded-lg bg-slate-950/60 border border-slate-800/80"
+                  className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[#FAF9F6] border border-[#EAE5DA]"
                 >
                   <div
                     onClick={() => handleToggleSubtask(sub.id)}
-                    className="flex items-center gap-2 cursor-pointer text-xs flex-1 text-slate-300 hover:text-white"
+                    className="flex items-center gap-2 cursor-pointer text-xs flex-1 text-stone-800"
                   >
                     {sub.completed ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                     ) : (
-                      <Circle className="w-4 h-4 text-slate-500 shrink-0" />
+                      <Circle className="w-4 h-4 text-stone-300 hover:text-stone-500 shrink-0" />
                     )}
-                    <span className={sub.completed ? 'line-through text-slate-500' : ''}>
+                    <span className={`text-xs ${sub.completed ? 'line-through text-stone-400' : ''}`}>
                       {sub.title}
                     </span>
                   </div>
@@ -341,7 +341,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                   <button
                     type="button"
                     onClick={() => handleDeleteSubtask(sub.id)}
-                    className="text-slate-500 hover:text-rose-400 p-1 rounded transition-colors"
+                    className="text-stone-300 hover:text-rose-600 p-1 rounded transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -362,12 +362,12 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                     handleAddSubtask();
                   }
                 }}
-                className="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="flex-1 bg-[#FAF9F6] border border-[#E5E0D4] rounded-lg px-3 py-1.5 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-stone-400"
               />
               <button
                 type="button"
                 onClick={handleAddSubtask}
-                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-white transition-colors"
+                className="px-3 py-1.5 rounded-lg bg-[#F6F4EE] hover:bg-[#ECE8DD] text-stone-700 text-xs font-medium border border-[#EAE5DA] transition-colors"
               >
                 Add
               </button>
@@ -376,14 +376,14 @@ export const TaskModal: React.FC<TaskModalProps> = ({
 
           {/* AI Insights display */}
           {formData.aiInsight && (
-            <div className="p-3 rounded-xl bg-purple-950/30 border border-purple-800/40 text-xs text-purple-300 flex items-start gap-2">
-              <Sparkles className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+            <div className="p-3 rounded-xl bg-amber-50/60 border border-amber-200/60 text-xs text-amber-900 flex items-start gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
               <span>{formData.aiInsight}</span>
             </div>
           )}
 
           {/* Footer Actions */}
-          <div className="flex items-center justify-between pt-4 border-t border-slate-800">
+          <div className="flex items-center justify-between pt-3 border-t border-[#F1EDE4]">
             {task ? (
               <button
                 type="button"
@@ -393,9 +393,9 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                     onClose();
                   }
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-rose-400 hover:bg-rose-950/30 border border-rose-900/40 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-rose-600 hover:bg-rose-50 border border-rose-200 transition-colors"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="w-3.5 h-3.5" />
                 <span>Delete</span>
               </button>
             ) : <div />}
@@ -404,17 +404,17 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                className="px-4 py-1.5 rounded-xl text-xs font-medium text-stone-600 hover:bg-[#F1EDE4] transition-colors"
               >
                 Cancel
               </button>
 
               <button
                 type="submit"
-                className="flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-600/20 transition-all"
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-semibold bg-stone-900 hover:bg-stone-800 text-white shadow-warm-sm transition-all"
               >
-                <Save className="w-4 h-4" />
-                <span>Save Task</span>
+                <Save className="w-3.5 h-3.5" />
+                <span>Save</span>
               </button>
             </div>
           </div>

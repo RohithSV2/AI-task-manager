@@ -4,19 +4,20 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { QuickAITaskBar } from '@/components/QuickAITaskBar';
 import { TaskBoard } from '@/components/TaskBoard';
+import { TaskListView } from '@/components/TaskListView';
 import { EisenhowerMatrix } from '@/components/EisenhowerMatrix';
 import { AnalyticsView } from '@/components/AnalyticsView';
 import { TaskModal } from '@/components/TaskModal';
 import { AIAssistantDrawer } from '@/components/AIAssistantDrawer';
 import { Task, TaskStatus } from '@/types';
 import { loadTasksFromStorage, saveTasksToStorage, resetTasksToDefault } from '@/lib/storage';
-import { CheckSquare, Github, Bot } from 'lucide-react';
+import { CheckSquare, Github, Bot, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isClient, setIsClient] = useState(false);
-  const [currentView, setCurrentView] = useState<'kanban' | 'eisenhower' | 'analytics'>('kanban');
+  const [currentView, setCurrentView] = useState<'kanban' | 'list' | 'eisenhower' | 'analytics'>('kanban');
   
   // Modals state
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
@@ -45,7 +46,7 @@ export default function Home() {
         if (newStatus === 'completed' && t.status !== 'completed') {
           try {
             confetti({
-              particleCount: 50,
+              particleCount: 45,
               spread: 60,
               origin: { y: 0.8 }
             });
@@ -110,7 +111,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-purple-500/30 selection:text-purple-200">
+    <div className="min-h-screen flex flex-col bg-[#FAF9F6] text-stone-900 selection:bg-amber-100 selection:text-amber-900">
       {/* Top Navbar */}
       <Navbar
         currentView={currentView}
@@ -122,13 +123,23 @@ export default function Home() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5">
         {/* Quick AI Task Creator Section */}
         <QuickAITaskBar onTaskCreated={handleTaskCreated} />
 
         {/* Dynamic Views */}
         {currentView === 'kanban' && (
           <TaskBoard
+            tasks={tasks}
+            onOpenTaskModal={handleOpenTaskModal}
+            onUpdateTaskStatus={handleUpdateTaskStatus}
+            onDeleteTask={handleDeleteTask}
+            onToggleSubtask={handleToggleSubtask}
+          />
+        )}
+
+        {currentView === 'list' && (
+          <TaskListView
             tasks={tasks}
             onOpenTaskModal={handleOpenTaskModal}
             onUpdateTaskStatus={handleUpdateTaskStatus}
@@ -155,13 +166,13 @@ export default function Home() {
       <div className="fixed bottom-6 right-6 z-30">
         <button
           onClick={() => setIsAICopilotOpen(true)}
-          className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold text-xs shadow-2xl shadow-purple-600/30 hover:scale-105 active:scale-95 transition-all group"
+          className="flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-stone-900 hover:bg-stone-800 text-white font-medium text-xs shadow-warm-lg hover:scale-105 active:scale-95 transition-all group"
         >
-          <div className="p-1 rounded-lg bg-white/20">
-            <Bot className="w-4 h-4 text-white" />
+          <div className="p-1 rounded-lg bg-stone-800">
+            <Bot className="w-3.5 h-3.5 text-amber-400" />
           </div>
-          <span>Ask TaskMaster AI</span>
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping ml-1" />
+          <span>Ask AI Copilot</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping ml-0.5" />
         </button>
       </div>
 
@@ -181,12 +192,12 @@ export default function Home() {
       />
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-slate-900 bg-slate-950/80 backdrop-blur-md py-6 text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <footer className="mt-auto border-t border-[#ECE8DD] bg-[#FAF9F6] py-5 text-xs text-stone-500">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <CheckSquare className="w-4 h-4 text-purple-400" />
-            <span className="font-semibold text-slate-300">TaskMaster AI</span>
-            <span>• Intelligent Task Management & Workload Prioritization</span>
+            <CheckSquare className="w-4 h-4 text-amber-600" />
+            <span className="font-semibold text-stone-800">TaskMaster AI</span>
+            <span>• Focused & Intelligent Task Management</span>
           </div>
 
           <div className="flex items-center gap-4 text-[11px]">
@@ -194,15 +205,15 @@ export default function Home() {
               href="https://github.com/RohithSV2/AI-task-manager"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1 text-slate-400 hover:text-white transition-colors"
+              className="flex items-center gap-1 text-stone-500 hover:text-stone-900 transition-colors"
             >
-              <Github className="w-3.5 h-3.5" />
-              <span>GitHub Repository</span>
+              <Github className="w-3 h-3" />
+              <span>GitHub</span>
             </a>
-            <span className="text-slate-800">|</span>
-            <span className="flex items-center gap-1 text-emerald-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              Production Ready on Vercel
+            <span className="text-stone-300">|</span>
+            <span className="flex items-center gap-1 text-emerald-700">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              Deployed on Vercel
             </span>
           </div>
         </div>

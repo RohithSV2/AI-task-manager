@@ -6,35 +6,38 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  darkMode: "class",
   theme: {
     extend: {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        cloud: {
-          50: "#f0f7ff",
-          100: "#e0effe",
-          200: "#bae0fd",
-          300: "#7cc5fb",
-          400: "#36a7f7",
-          500: "#0c8ce9",
-          600: "#026fc7",
-          700: "#0358a1",
-          800: "#074b85",
-          900: "#0c3f6e",
-          950: "#082849",
+        cream: {
+          50: "#FAF9F6",
+          100: "#F6F4EE",
+          200: "#ECE8DD",
+          300: "#DFD9CA",
+          400: "#C9BFAB",
+          500: "#A99C85",
+          800: "#3D372E",
+          900: "#24201A",
         },
       },
-      keyframes: {
-        pulseGlow: {
-          "0%, 100%": { opacity: "0.4" },
-          "50%": { opacity: "0.9" },
-        },
+      fontFamily: {
+        sans: [
+          "-apple-system",
+          "BlinkMacSystemFont",
+          '"Segoe UI"',
+          "Roboto",
+          "Helvetica",
+          "Arial",
+          "sans-serif"
+        ],
       },
-      animation: {
-        "pulse-glow": "pulseGlow 3s ease-in-out infinite",
-      },
+      boxShadow: {
+        'warm-sm': '0 1px 2px 0 rgba(40, 30, 20, 0.04)',
+        'warm-md': '0 4px 12px -2px rgba(40, 30, 20, 0.06), 0 2px 4px -2px rgba(40, 30, 20, 0.03)',
+        'warm-lg': '0 12px 24px -4px rgba(40, 30, 20, 0.08), 0 4px 8px -2px rgba(40, 30, 20, 0.03)',
+      }
     },
   },
   plugins: [],
