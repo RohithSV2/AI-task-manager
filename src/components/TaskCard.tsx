@@ -6,13 +6,12 @@ import {
   Circle, 
   Clock, 
   Sparkles, 
-  Server, 
-  MoreVertical,
-  Calendar,
-  AlertTriangle,
-  ArrowRight
+  Folder, 
+  Calendar, 
+  AlertTriangle, 
+  ArrowRight 
 } from 'lucide-react';
-import { Task, Priority, TaskStatus } from '@/types';
+import { Task, Priority, TaskStatus, TaskCategory } from '@/types';
 import { formatDate, isOverdue } from '@/lib/utils';
 
 interface TaskCardProps {
@@ -42,6 +41,15 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     low: { bg: 'bg-slate-500/10', text: 'text-slate-400', border: 'border-slate-500/30' }
   };
 
+  const categoryColors: Record<TaskCategory, string> = {
+    Work: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
+    Personal: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
+    Development: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30',
+    Design: 'bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/30',
+    Study: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+    Health: 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+  };
+
   const nextStatusMap: Record<TaskStatus, TaskStatus | null> = {
     backlog: 'todo',
     todo: 'in_progress',
@@ -53,20 +61,20 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   const nextStatus = nextStatusMap[task.status];
 
   return (
-    <div className="group relative bg-slate-900/90 hover:bg-slate-900 border border-slate-800 hover:border-slate-700/80 rounded-xl p-4 shadow-lg hover:shadow-cyan-500/5 transition-all duration-200">
+    <div className="group relative bg-slate-900/90 hover:bg-slate-900 border border-slate-800 hover:border-slate-700/80 rounded-xl p-4 shadow-lg hover:shadow-purple-500/5 transition-all duration-200">
       {/* Top Header */}
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-1.5 flex-wrap">
           <span className={`text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full border ${priorityColors[task.priority].bg} ${priorityColors[task.priority].text} ${priorityColors[task.priority].border}`}>
             {task.priority}
           </span>
-          <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+          <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${categoryColors[task.category] || 'bg-slate-800 text-slate-300'}`}>
             {task.category}
           </span>
         </div>
 
         {task.aiSuggested && (
-          <span className="flex items-center gap-1 text-[10px] text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 px-1.5 py-0.5 rounded-full">
+          <span className="flex items-center gap-1 text-[10px] text-purple-400 bg-purple-500/10 border border-purple-500/30 px-1.5 py-0.5 rounded-full">
             <Sparkles className="w-2.5 h-2.5" />
             AI Optimized
           </span>
@@ -76,7 +84,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       {/* Title */}
       <h4 
         onClick={() => onOpenDetails(task)}
-        className="text-sm font-semibold text-white group-hover:text-cyan-300 transition-colors cursor-pointer line-clamp-2 mb-1.5"
+        className="text-sm font-semibold text-white group-hover:text-purple-300 transition-colors cursor-pointer line-clamp-2 mb-1.5"
       >
         {task.title}
       </h4>
@@ -88,11 +96,11 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         </p>
       )}
 
-      {/* Cloud Resource Pill */}
-      {task.cloudResource && (
+      {/* Project Pill */}
+      {task.project && (
         <div className="flex items-center gap-1 text-[11px] text-slate-400 bg-slate-950/70 px-2 py-1 rounded-md border border-slate-800/80 mb-3 w-fit">
-          <Server className="w-3 h-3 text-cyan-400" />
-          <span className="truncate max-w-[200px]">{task.cloudResource}</span>
+          <Folder className="w-3 h-3 text-purple-400" />
+          <span className="truncate max-w-[200px]">{task.project}</span>
         </div>
       )}
 
@@ -100,12 +108,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       {totalSubtasks > 0 && (
         <div className="mb-3 space-y-1.5 bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/60">
           <div className="flex items-center justify-between text-[11px] text-slate-400">
-            <span>Sub-tasks</span>
+            <span>Action Items</span>
             <span className="font-medium text-slate-300">{completedSubtasks}/{totalSubtasks} ({progressPercent}%)</span>
           </div>
           <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300"
+              className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -133,7 +141,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             {totalSubtasks > 2 && (
               <p 
                 onClick={() => onOpenDetails(task)}
-                className="text-[10px] text-cyan-400 hover:underline cursor-pointer pt-0.5"
+                className="text-[10px] text-purple-400 hover:underline cursor-pointer pt-0.5"
               >
                 +{totalSubtasks - 2} more subtasks...
               </p>
@@ -171,17 +179,17 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           {nextStatus && (
             <button
               onClick={() => onUpdateStatus(task.id, nextStatus)}
-              className="flex items-center gap-1 px-2 py-1 rounded bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 text-xs font-medium border border-blue-500/30 transition-all"
-              title={`Move to ${nextStatus.replace('_', ' ')}`}
+              className="flex items-center gap-1 px-2.5 py-1 rounded bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 text-xs font-medium border border-purple-500/30 transition-all"
+              title={`Advance to ${nextStatus.replace('_', ' ')}`}
             >
-              <span>Next</span>
+              <span>Move Next</span>
               <ArrowRight className="w-3 h-3" />
             </button>
           )}
 
           {task.status === 'completed' && (
             <span className="flex items-center gap-1 text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-              <CheckCircle2 className="w-3 h-3" /> Done
+              <CheckCircle2 className="w-3 h-3" /> Completed
             </span>
           )}
         </div>

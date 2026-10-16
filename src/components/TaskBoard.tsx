@@ -5,14 +5,9 @@ import {
   Search, 
   Filter, 
   Plus, 
-  Clock, 
-  CheckCircle2, 
-  AlertCircle,
-  Inbox,
-  ArrowUpDown,
-  Sparkles
+  Inbox
 } from 'lucide-react';
-import { Task, TaskStatus, Priority, TaskCategory } from '@/types';
+import { Task, TaskStatus } from '@/types';
 import { TaskCard } from './TaskCard';
 
 interface TaskBoardProps {
@@ -33,8 +28,8 @@ interface ColumnConfig {
 const COLUMNS: ColumnConfig[] = [
   { status: 'backlog', title: 'Backlog', dotColor: 'bg-slate-400', badgeBg: 'bg-slate-500/10 text-slate-300' },
   { status: 'todo', title: 'To Do', dotColor: 'bg-blue-400', badgeBg: 'bg-blue-500/10 text-blue-300' },
-  { status: 'in_progress', title: 'In Progress', dotColor: 'bg-cyan-400', badgeBg: 'bg-cyan-500/10 text-cyan-300' },
-  { status: 'review', title: 'Review & QA', dotColor: 'bg-purple-400', badgeBg: 'bg-purple-500/10 text-purple-300' },
+  { status: 'in_progress', title: 'In Progress', dotColor: 'bg-amber-400', badgeBg: 'bg-amber-500/10 text-amber-300' },
+  { status: 'review', title: 'Review', dotColor: 'bg-purple-400', badgeBg: 'bg-purple-500/10 text-purple-300' },
   { status: 'completed', title: 'Completed', dotColor: 'bg-emerald-400', badgeBg: 'bg-emerald-500/10 text-emerald-300' }
 ];
 
@@ -56,7 +51,7 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
         task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         task.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (task.cloudResource && task.cloudResource.toLowerCase().includes(searchQuery.toLowerCase()));
+        (task.project && task.project.toLowerCase().includes(searchQuery.toLowerCase()));
 
       // Priority filter
       const matchesPriority = selectedPriority === 'all' || task.priority === selectedPriority;
@@ -87,8 +82,8 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search tasks, tags, cloud services..."
-            className="w-full bg-slate-950/80 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+            placeholder="Search tasks, tags, projects..."
+            className="w-full bg-slate-950/80 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
           />
         </div>
 
@@ -116,17 +111,18 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
               className="bg-transparent text-xs text-slate-300 focus:outline-none cursor-pointer"
             >
               <option value="all">All Categories</option>
-              <option value="Cloud Computing">Cloud Computing</option>
-              <option value="DevOps">DevOps</option>
-              <option value="AI & ML">AI & ML</option>
-              <option value="Architecture">Architecture</option>
-              <option value="General">General</option>
+              <option value="Work">Work</option>
+              <option value="Personal">Personal</option>
+              <option value="Development">Development</option>
+              <option value="Design">Design</option>
+              <option value="Study">Study</option>
+              <option value="Health">Health</option>
             </select>
           </div>
 
           <button
             onClick={() => onOpenTaskModal(null)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md shadow-blue-500/20 shrink-0 transition-all ml-auto md:ml-0"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold shadow-md shadow-purple-500/20 shrink-0 transition-all ml-auto md:ml-0"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Task</span>
@@ -149,8 +145,8 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
           <span className="font-bold text-rose-400 text-sm">{stats.urgentCount}</span>
         </div>
         <div className="bg-slate-900/60 border border-slate-800/80 p-3 rounded-xl flex items-center justify-between">
-          <span className="text-slate-400">Est. Cloud Effort</span>
-          <span className="font-bold text-cyan-400 text-sm">{stats.totalEstHours} hrs</span>
+          <span className="text-slate-400">Total Est. Hours</span>
+          <span className="font-bold text-purple-400 text-sm">{stats.totalEstHours} hrs</span>
         </div>
       </div>
 

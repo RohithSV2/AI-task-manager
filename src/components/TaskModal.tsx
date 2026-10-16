@@ -8,14 +8,13 @@ import {
   Trash2, 
   Clock, 
   Calendar, 
-  Server, 
+  Folder, 
   CheckCircle2, 
   Circle,
   Loader2,
-  Save,
-  Tag
+  Save
 } from 'lucide-react';
-import { Task, Priority, TaskCategory, TaskStatus, EisenhowerQuadrant } from '@/types';
+import { Task, Priority, TaskCategory, TaskStatus } from '@/types';
 import { generateId } from '@/lib/utils';
 
 interface TaskModalProps {
@@ -36,7 +35,6 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   const [formData, setFormData] = useState<Partial<Task>>({});
   const [newSubtaskTitle, setNewSubtaskTitle] = useState('');
   const [isBreakingDown, setIsBreakingDown] = useState(false);
-  const [newTag, setNewTag] = useState('');
 
   useEffect(() => {
     if (task) {
@@ -48,13 +46,13 @@ export const TaskModal: React.FC<TaskModalProps> = ({
         description: '',
         priority: 'medium',
         status: 'todo',
-        category: 'Cloud Computing',
+        category: 'Work',
         dueDate: new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0],
-        estimatedHours: 4,
+        estimatedHours: 3,
         actualHours: 0,
         subtasks: [],
-        tags: ['Cloud'],
-        cloudResource: 'AWS Lambda / Vercel Edge',
+        tags: ['General'],
+        project: 'Personal Projects',
         eisenhowerQuadrant: 'q2_not_urgent_important',
         aiSuggested: false,
         aiComplexityScore: 50,
@@ -138,26 +136,6 @@ export const TaskModal: React.FC<TaskModalProps> = ({
     }
   };
 
-  const handleAddTag = () => {
-    if (!newTag.trim()) return;
-    const currentTags = formData.tags || [];
-    if (!currentTags.includes(newTag.trim())) {
-      setFormData(prev => ({
-        ...prev,
-        tags: [...currentTags, newTag.trim()]
-      }));
-    }
-    setNewTag('');
-  };
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    const currentTags = formData.tags || [];
-    setFormData(prev => ({
-      ...prev,
-      tags: currentTags.filter(t => t !== tagToRemove)
-    }));
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title?.trim()) return;
@@ -173,10 +151,10 @@ export const TaskModal: React.FC<TaskModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/40">
           <div className="flex items-center gap-2">
             <h3 className="text-base font-bold text-white">
-              {task ? 'Edit Task Specifications' : 'Create New Cloud Task'}
+              {task ? 'Edit Task' : 'Create New Task'}
             </h3>
             {formData.aiSuggested && (
-              <span className="flex items-center gap-1 text-[11px] text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 rounded-full">
+              <span className="flex items-center gap-1 text-[11px] text-purple-400 bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 rounded-full">
                 <Sparkles className="w-3 h-3" /> AI Assisted
               </span>
             )}
@@ -201,22 +179,22 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               required
               value={formData.title || ''}
               onChange={(e) => handleFieldChange('title', e.target.value)}
-              placeholder="e.g. Implement AWS DynamoDB caching layer with TTL"
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all"
+              placeholder="e.g. Design presentation slides for product launch"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
             />
           </div>
 
           {/* Description */}
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1">
-              Description & Objectives
+              Description & Notes
             </label>
             <textarea
               rows={3}
               value={formData.description || ''}
               onChange={(e) => handleFieldChange('description', e.target.value)}
-              placeholder="Describe requirements, SLA thresholds, and cloud dependencies..."
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all resize-none"
+              placeholder="Add key goals, reference links, and acceptance criteria..."
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all resize-none"
             />
           </div>
 
@@ -227,15 +205,16 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 Category
               </label>
               <select
-                value={formData.category || 'Cloud Computing'}
+                value={formData.category || 'Work'}
                 onChange={(e) => handleFieldChange('category', e.target.value as TaskCategory)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
               >
-                <option value="Cloud Computing">Cloud Computing</option>
-                <option value="DevOps">DevOps</option>
-                <option value="AI & ML">AI & ML</option>
-                <option value="Architecture">Architecture</option>
-                <option value="General">General</option>
+                <option value="Work">Work</option>
+                <option value="Personal">Personal</option>
+                <option value="Development">Development</option>
+                <option value="Design">Design</option>
+                <option value="Study">Study</option>
+                <option value="Health">Health</option>
               </select>
             </div>
 
@@ -246,7 +225,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               <select
                 value={formData.priority || 'medium'}
                 onChange={(e) => handleFieldChange('priority', e.target.value as Priority)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
               >
                 <option value="low">Low Priority</option>
                 <option value="medium">Medium Priority</option>
@@ -262,7 +241,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               <select
                 value={formData.status || 'todo'}
                 onChange={(e) => handleFieldChange('status', e.target.value as TaskStatus)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
               >
                 <option value="backlog">Backlog</option>
                 <option value="todo">To Do</option>
@@ -280,27 +259,26 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 type="date"
                 value={formData.dueDate || ''}
                 onChange={(e) => handleFieldChange('dueDate', e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
-              >
-              </input>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Target Cloud Resource
-              </label>
-              <input
-                type="text"
-                value={formData.cloudResource || ''}
-                onChange={(e) => handleFieldChange('cloudResource', e.target.value)}
-                placeholder="e.g. AWS Lambda, S3, Vercel Edge"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
               />
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Estimated Duration (Hours)
+                Project / Initiative
+              </label>
+              <input
+                type="text"
+                value={formData.project || ''}
+                onChange={(e) => handleFieldChange('project', e.target.value)}
+                placeholder="e.g. Q4 Growth, Personal Fitness"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Estimated Hours
               </label>
               <input
                 type="number"
@@ -308,7 +286,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 step="0.5"
                 value={formData.estimatedHours || 1}
                 onChange={(e) => handleFieldChange('estimatedHours', parseFloat(e.target.value))}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
               />
             </div>
           </div>
@@ -317,7 +295,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
           <div className="pt-2 border-t border-slate-800">
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs font-semibold text-slate-200">
-                Sub-Tasks & Action Items ({formData.subtasks?.length || 0})
+                Action Steps ({formData.subtasks?.length || 0})
               </label>
               <button
                 type="button"
@@ -384,7 +362,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                     handleAddSubtask();
                   }
                 }}
-                className="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                className="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
               />
               <button
                 type="button"
@@ -398,8 +376,8 @@ export const TaskModal: React.FC<TaskModalProps> = ({
 
           {/* AI Insights display */}
           {formData.aiInsight && (
-            <div className="p-3 rounded-xl bg-cyan-950/30 border border-cyan-800/40 text-xs text-cyan-300 flex items-start gap-2">
-              <Sparkles className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+            <div className="p-3 rounded-xl bg-purple-950/30 border border-purple-800/40 text-xs text-purple-300 flex items-start gap-2">
+              <Sparkles className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
               <span>{formData.aiInsight}</span>
             </div>
           )}
@@ -410,7 +388,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  if (confirm('Are you sure you want to delete this cloud task?')) {
+                  if (confirm('Delete this task?')) {
                     onDelete(task.id);
                     onClose();
                   }
@@ -418,7 +396,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-rose-400 hover:bg-rose-950/30 border border-rose-900/40 transition-colors"
               >
                 <Trash2 className="w-4 h-4" />
-                <span>Delete Task</span>
+                <span>Delete</span>
               </button>
             ) : <div />}
 
@@ -433,10 +411,10 @@ export const TaskModal: React.FC<TaskModalProps> = ({
 
               <button
                 type="submit"
-                className="flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg shadow-cyan-600/20 transition-all"
+                className="flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-600/20 transition-all"
               >
                 <Save className="w-4 h-4" />
-                <span>Save Specifications</span>
+                <span>Save Task</span>
               </button>
             </div>
           </div>

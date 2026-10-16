@@ -2,23 +2,21 @@
 
 import React from 'react';
 import { 
-  Cloud, 
+  CheckSquare, 
   Sparkles, 
   Layers, 
   Grid3X3, 
-  Activity, 
+  BarChart3, 
   Bot, 
   RotateCcw,
-  Plus,
-  Server
+  Plus
 } from 'lucide-react';
 
 interface NavbarProps {
-  currentView: 'kanban' | 'eisenhower' | 'telemetry' | 'analytics';
-  setCurrentView: (view: 'kanban' | 'eisenhower' | 'telemetry' | 'analytics') => void;
+  currentView: 'kanban' | 'eisenhower' | 'analytics';
+  setCurrentView: (view: 'kanban' | 'eisenhower' | 'analytics') => void;
   onOpenNewTaskModal: () => void;
   onOpenAICopilot: () => void;
-  onOpenArchitecture: () => void;
   onResetTasks: () => void;
   taskCount: number;
 }
@@ -28,41 +26,40 @@ export const Navbar: React.FC<NavbarProps> = ({
   setCurrentView,
   onOpenNewTaskModal,
   onOpenAICopilot,
-  onOpenArchitecture,
   onResetTasks,
   taskCount
 }) => {
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-slate-900/80 border-b border-slate-800 text-white">
+    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-slate-900/90 border-b border-slate-800 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand */}
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
-              <Cloud className="w-6 h-6 text-white" />
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+              <CheckSquare className="w-5 h-5 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-cyan-300 bg-clip-text text-transparent">
-                  CloudTask AI
+                <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-purple-200 bg-clip-text text-transparent">
+                  TaskMaster AI
                 </span>
-                <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-                  Cloud v1.0
+                <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/30">
+                  AI Powered
                 </span>
               </div>
               <p className="text-xs text-slate-400 hidden sm:block">
-                Autonomous Cloud-Native Task Orchestration
+                Smart Task Planning, Breakdown & Workload Prioritization
               </p>
             </div>
           </div>
 
-          {/* Nav Tabs */}
-          <nav className="hidden md:flex items-center gap-1 bg-slate-950/60 p-1 rounded-xl border border-slate-800/80">
+          {/* Navigation View Switcher */}
+          <nav className="hidden md:flex items-center gap-1 bg-slate-950/70 p-1 rounded-xl border border-slate-800/80">
             <button
               onClick={() => setCurrentView('kanban')}
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 currentView === 'kanban'
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
+                  ? 'bg-purple-600 text-white shadow-md shadow-purple-500/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
               }`}
             >
@@ -73,7 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setCurrentView('eisenhower')}
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 currentView === 'eisenhower'
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
+                  ? 'bg-purple-600 text-white shadow-md shadow-purple-500/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
               }`}
             >
@@ -81,40 +78,20 @@ export const Navbar: React.FC<NavbarProps> = ({
               Eisenhower Matrix
             </button>
             <button
-              onClick={() => setCurrentView('telemetry')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                currentView === 'telemetry'
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-              }`}
-            >
-              <Activity className="w-3.5 h-3.5" />
-              Cloud Telemetry
-            </button>
-            <button
               onClick={() => setCurrentView('analytics')}
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 currentView === 'analytics'
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
+                  ? 'bg-purple-600 text-white shadow-md shadow-purple-500/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
               }`}
             >
-              <Server className="w-3.5 h-3.5" />
-              Analytics
+              <BarChart3 className="w-3.5 h-3.5" />
+              Productivity Analytics
             </button>
           </nav>
 
-          {/* Action Buttons */}
+          {/* Actions */}
           <div className="flex items-center gap-2">
-            <button
-              onClick={onOpenArchitecture}
-              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-cyan-300 bg-cyan-950/40 border border-cyan-800/50 hover:bg-cyan-900/50 transition-all"
-              title="View Cloud Computing Architecture Diagram"
-            >
-              <Cloud className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Cloud Arch</span>
-            </button>
-
             <button
               onClick={onOpenAICopilot}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-purple-300 bg-purple-950/40 border border-purple-800/50 hover:bg-purple-900/50 transition-all"
@@ -125,7 +102,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={onOpenNewTaskModal}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-md shadow-blue-500/20 transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white shadow-md shadow-purple-500/20 transition-all"
             >
               <Plus className="w-4 h-4" />
               <span>New Task</span>
@@ -141,12 +118,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* Mobile View Navigation */}
+        {/* Mobile View Switcher */}
         <div className="flex md:hidden overflow-x-auto py-2 gap-1 border-t border-slate-800/60 scrollbar-none">
           <button
             onClick={() => setCurrentView('kanban')}
             className={`px-3 py-1 rounded-lg text-xs whitespace-nowrap font-medium ${
-              currentView === 'kanban' ? 'bg-blue-600 text-white' : 'text-slate-400'
+              currentView === 'kanban' ? 'bg-purple-600 text-white' : 'text-slate-400'
             }`}
           >
             Kanban
@@ -154,23 +131,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={() => setCurrentView('eisenhower')}
             className={`px-3 py-1 rounded-lg text-xs whitespace-nowrap font-medium ${
-              currentView === 'eisenhower' ? 'bg-blue-600 text-white' : 'text-slate-400'
+              currentView === 'eisenhower' ? 'bg-purple-600 text-white' : 'text-slate-400'
             }`}
           >
-            Eisenhower
-          </button>
-          <button
-            onClick={() => setCurrentView('telemetry')}
-            className={`px-3 py-1 rounded-lg text-xs whitespace-nowrap font-medium ${
-              currentView === 'telemetry' ? 'bg-blue-600 text-white' : 'text-slate-400'
-            }`}
-          >
-            Cloud Telemetry
+            Eisenhower Matrix
           </button>
           <button
             onClick={() => setCurrentView('analytics')}
             className={`px-3 py-1 rounded-lg text-xs whitespace-nowrap font-medium ${
-              currentView === 'analytics' ? 'bg-blue-600 text-white' : 'text-slate-400'
+              currentView === 'analytics' ? 'bg-purple-600 text-white' : 'text-slate-400'
             }`}
           >
             Analytics

@@ -5,27 +5,23 @@ import { Navbar } from '@/components/Navbar';
 import { QuickAITaskBar } from '@/components/QuickAITaskBar';
 import { TaskBoard } from '@/components/TaskBoard';
 import { EisenhowerMatrix } from '@/components/EisenhowerMatrix';
-import { CloudTelemetryDashboard } from '@/components/CloudTelemetryDashboard';
 import { AnalyticsView } from '@/components/AnalyticsView';
 import { TaskModal } from '@/components/TaskModal';
 import { AIAssistantDrawer } from '@/components/AIAssistantDrawer';
-import { ArchitectureModal } from '@/components/ArchitectureModal';
 import { Task, TaskStatus } from '@/types';
 import { loadTasksFromStorage, saveTasksToStorage, resetTasksToDefault } from '@/lib/storage';
-import { initialTasks } from '@/lib/default-tasks';
-import { Bot, Sparkles, Cloud, Github, ExternalLink, Server, CheckCircle2 } from 'lucide-react';
+import { CheckSquare, Github, Bot } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isClient, setIsClient] = useState(false);
-  const [currentView, setCurrentView] = useState<'kanban' | 'eisenhower' | 'telemetry' | 'analytics'>('kanban');
+  const [currentView, setCurrentView] = useState<'kanban' | 'eisenhower' | 'analytics'>('kanban');
   
   // Modals state
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isAICopilotOpen, setIsAICopilotOpen] = useState(false);
-  const [isArchitectureOpen, setIsArchitectureOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -102,7 +98,7 @@ export default function Home() {
   };
 
   const handleResetTasks = () => {
-    if (confirm('Reset to default Cloud Computing sample tasks?')) {
+    if (confirm('Reset to default sample tasks?')) {
       const def = resetTasksToDefault();
       setTasks(def);
     }
@@ -114,14 +110,13 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-purple-500/30 selection:text-purple-200">
       {/* Top Navbar */}
       <Navbar
         currentView={currentView}
         setCurrentView={setCurrentView}
         onOpenNewTaskModal={() => handleOpenTaskModal(null)}
         onOpenAICopilot={() => setIsAICopilotOpen(true)}
-        onOpenArchitecture={() => setIsArchitectureOpen(true)}
         onResetTasks={handleResetTasks}
         taskCount={tasks.length}
       />
@@ -151,10 +146,6 @@ export default function Home() {
           />
         )}
 
-        {currentView === 'telemetry' && (
-          <CloudTelemetryDashboard />
-        )}
-
         {currentView === 'analytics' && (
           <AnalyticsView tasks={tasks} />
         )}
@@ -169,7 +160,7 @@ export default function Home() {
           <div className="p-1 rounded-lg bg-white/20">
             <Bot className="w-4 h-4 text-white" />
           </div>
-          <span>Ask CloudTask AI</span>
+          <span>Ask TaskMaster AI</span>
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping ml-1" />
         </button>
       </div>
@@ -189,18 +180,13 @@ export default function Home() {
         tasks={tasks}
       />
 
-      <ArchitectureModal
-        isOpen={isArchitectureOpen}
-        onClose={() => setIsArchitectureOpen(false)}
-      />
-
       {/* Footer */}
       <footer className="mt-auto border-t border-slate-900 bg-slate-950/80 backdrop-blur-md py-6 text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Cloud className="w-4 h-4 text-cyan-400" />
-            <span className="font-semibold text-slate-300">CloudTask AI</span>
-            <span>• Cloud Computing Academic Project</span>
+            <CheckSquare className="w-4 h-4 text-purple-400" />
+            <span className="font-semibold text-slate-300">TaskMaster AI</span>
+            <span>• Intelligent Task Management & Workload Prioritization</span>
           </div>
 
           <div className="flex items-center gap-4 text-[11px]">
@@ -211,12 +197,12 @@ export default function Home() {
               className="flex items-center gap-1 text-slate-400 hover:text-white transition-colors"
             >
               <Github className="w-3.5 h-3.5" />
-              <span>GitHub Repo</span>
+              <span>GitHub Repository</span>
             </a>
             <span className="text-slate-800">|</span>
             <span className="flex items-center gap-1 text-emerald-400">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              Vercel Serverless Ready (iad1)
+              Production Ready on Vercel
             </span>
           </div>
         </div>

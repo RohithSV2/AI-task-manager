@@ -8,9 +8,6 @@ import {
   Sparkles, 
   Loader2, 
   User, 
-  Zap, 
-  Layers, 
-  CheckCircle2,
   Trash2
 } from 'lucide-react';
 import { Task, ChatMessage } from '@/types';
@@ -32,11 +29,11 @@ export const AIAssistantDrawer: React.FC<AIAssistantDrawerProps> = ({
     {
       id: 'msg_welcome',
       role: 'assistant',
-      content: `👋 **Hello! I'm CloudTask AI**, your autonomous cloud engineering and task copilot. 
+      content: `👋 **Hi there! I'm TaskMaster AI**, your personal productivity coach. 
 
-I can analyze your ${tasks.length} active tasks, provide daily standup summaries, auto-prioritize sprint goals, or break down cloud infrastructure epics. 
+I can analyze your ${tasks.length} active tasks, organize your daily schedule, help you prioritize with the Eisenhower Matrix, or break down big goals into manageable steps.
 
-Click one of the suggested prompts below or ask me anything!`,
+How can I assist you today?`,
       timestamp: new Date().toLocaleTimeString()
     }
   ]);
@@ -55,10 +52,10 @@ Click one of the suggested prompts below or ask me anything!`,
   }, [messages, isOpen]);
 
   const quickPrompts = [
-    '📋 Generate my Daily Standup Briefing',
+    '📋 Plan my day with a quick briefing',
     '💡 Which task should I tackle right now?',
-    '☁️ Explain the Cloud Architecture of this app',
-    '⚡ How can we reduce serverless cold starts?'
+    '⚡ How can I prioritize my week better?',
+    '🎯 Break down my biggest project'
   ];
 
   const handleSendMessage = async (textToSend?: string) => {
@@ -88,7 +85,7 @@ Click one of the suggested prompts below or ask me anything!`,
       });
 
       const data = await res.json();
-      const replyContent = data.reply || "I've analyzed your cloud project tasks. Everything is running within SLA.";
+      const replyContent = data.reply || "I've analyzed your task list. Keep taking action on your top priorities!";
 
       const aiMsg: ChatMessage = {
         id: 'msg_' + Date.now() + '_ai',
@@ -105,7 +102,7 @@ Click one of the suggested prompts below or ask me anything!`,
         {
           id: 'msg_err_' + Date.now(),
           role: 'assistant',
-          content: '⚠️ Cloud inference timeout. Please ensure network connectivity and retry.',
+          content: '⚠️ Assistant temporarily busy. Please try again.',
           timestamp: new Date().toLocaleTimeString()
         }
       ]);
@@ -128,11 +125,11 @@ Click one of the suggested prompts below or ask me anything!`,
               </div>
               <div>
                 <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-                  CloudTask AI Copilot
+                  TaskMaster AI Assistant
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 </h3>
                 <p className="text-[11px] text-slate-400">
-                  Google Gemini & Serverless LLM Engine
+                  Smart Planning & Productivity Copilot
                 </p>
               </div>
             </div>
@@ -184,7 +181,7 @@ Click one of the suggested prompts below or ask me anything!`,
                 <div
                   className={`max-w-[85%] rounded-2xl p-3.5 text-xs leading-relaxed ${
                     m.role === 'user'
-                      ? 'bg-blue-600 text-white rounded-br-none'
+                      ? 'bg-purple-600 text-white rounded-br-none'
                       : 'bg-slate-950/80 border border-slate-800 text-slate-200 rounded-bl-none'
                   }`}
                 >
@@ -197,7 +194,7 @@ Click one of the suggested prompts below or ask me anything!`,
                 </div>
 
                 {m.role === 'user' && (
-                  <div className="w-7 h-7 rounded-lg bg-blue-600/30 border border-blue-500/40 flex items-center justify-center text-blue-300 shrink-0 mt-0.5">
+                  <div className="w-7 h-7 rounded-lg bg-purple-600/30 border border-purple-500/40 flex items-center justify-center text-purple-300 shrink-0 mt-0.5">
                     <User className="w-4 h-4" />
                   </div>
                 )}
@@ -207,7 +204,7 @@ Click one of the suggested prompts below or ask me anything!`,
             {loading && (
               <div className="flex items-center gap-2 text-xs text-slate-400 bg-slate-950/40 p-3 rounded-xl border border-slate-800/80 w-fit">
                 <Loader2 className="w-4 h-4 animate-spin text-purple-400" />
-                <span>CloudTask AI is reasoning over task vector index...</span>
+                <span>TaskMaster AI is thinking...</span>
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -226,7 +223,7 @@ Click one of the suggested prompts below or ask me anything!`,
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Ask about your cloud project or tasks..."
+                placeholder="Ask about planning, tasks, or subtasks..."
                 disabled={loading}
                 className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-all"
               />

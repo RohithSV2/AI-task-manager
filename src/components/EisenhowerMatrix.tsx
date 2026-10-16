@@ -10,8 +10,7 @@ import {
   Loader2, 
   CheckCircle2, 
   Clock, 
-  ArrowRight,
-  Server
+  Folder
 } from 'lucide-react';
 import { Task, EisenhowerQuadrant } from '@/types';
 import confetti from 'canvas-confetti';
@@ -76,7 +75,7 @@ export const EisenhowerMatrix: React.FC<EisenhowerMatrixProps> = ({
     {
       key: 'q1_urgent_important',
       title: 'Q1: DO FIRST',
-      subtitle: 'Critical Cloud Milestones & Immediate Incidents',
+      subtitle: 'Critical Deadlines, Emergencies & Urgent Commitments',
       icon: Flame,
       borderColor: 'border-rose-500/40',
       bgGradient: 'from-rose-950/20 via-slate-900 to-slate-950',
@@ -84,17 +83,17 @@ export const EisenhowerMatrix: React.FC<EisenhowerMatrixProps> = ({
     },
     {
       key: 'q2_not_urgent_important',
-      title: 'Q2: SCHEDULE / STRATEGY',
-      subtitle: 'Architecture Design, CI/CD, Capacity Planning',
+      title: 'Q2: SCHEDULE / FOCUS',
+      subtitle: 'Strategic Goals, Deep Work, Skill Building & Health',
       icon: Calendar,
-      borderColor: 'border-cyan-500/40',
-      bgGradient: 'from-cyan-950/20 via-slate-900 to-slate-950',
-      badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
+      borderColor: 'border-purple-500/40',
+      bgGradient: 'from-purple-950/20 via-slate-900 to-slate-950',
+      badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/40'
     },
     {
       key: 'q3_urgent_not_important',
-      title: 'Q3: DELEGATE / AUTOMATE',
-      subtitle: 'Routine Metric Checks, Log Rotation, Repetitive Scripts',
+      title: 'Q3: DELEGATE / QUICK WINS',
+      subtitle: 'Interruptive Requests, Routine Admin, Minor Errands',
       icon: Users,
       borderColor: 'border-amber-500/40',
       bgGradient: 'from-amber-950/20 via-slate-900 to-slate-950',
@@ -103,7 +102,7 @@ export const EisenhowerMatrix: React.FC<EisenhowerMatrixProps> = ({
     {
       key: 'q4_not_urgent_not_important',
       title: 'Q4: ELIMINATE / BACKLOG',
-      subtitle: 'Low Priority Explorations & Deprecated Features',
+      subtitle: 'Low-Value Distractions & Non-Essential Ideas',
       icon: Archive,
       borderColor: 'border-slate-700/60',
       bgGradient: 'from-slate-900 via-slate-900 to-slate-950',
@@ -120,24 +119,24 @@ export const EisenhowerMatrix: React.FC<EisenhowerMatrixProps> = ({
             <h3 className="text-base font-bold text-white">
               Eisenhower Matrix (Urgency vs. Importance)
             </h3>
-            <span className="text-[11px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/30">
-              Cloud Workload Optimization
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/30">
+              AI Decision Matrix
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1 max-w-xl">
-            Automatically classify engineering initiatives to prevent serverless bottlenecks and ensure critical deliverables stay on track.
+            Automatically organize your personal and professional tasks into four distinct focus quadrants to maximize productive impact.
           </p>
         </div>
 
         <button
           onClick={handleRunAIPrioritize}
           disabled={isPrioritizing || tasks.length === 0}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-xs text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 shadow-lg shadow-indigo-500/20 transition-all shrink-0 disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-xs text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-indigo-500 shadow-lg shadow-purple-500/20 transition-all shrink-0 disabled:opacity-50"
         >
           {isPrioritizing ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Analyzing Task Vector Space...</span>
+              <span>Analyzing Task Urgency...</span>
             </>
           ) : (
             <>
@@ -191,7 +190,7 @@ export const EisenhowerMatrix: React.FC<EisenhowerMatrixProps> = ({
               <div className="space-y-2.5 overflow-y-auto flex-1 pr-1">
                 {qTasks.length === 0 ? (
                   <div className="h-full flex items-center justify-center p-8 text-center text-slate-500 text-xs border border-dashed border-slate-800/60 rounded-xl my-auto">
-                    No tasks currently mapped to this quadrant.
+                    No tasks currently in this quadrant.
                   </div>
                 ) : (
                   qTasks.map(task => (
@@ -209,14 +208,14 @@ export const EisenhowerMatrix: React.FC<EisenhowerMatrixProps> = ({
                         </span>
                       </div>
 
-                      <h5 className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors line-clamp-1 mb-1">
+                      <h5 className="text-xs font-semibold text-white group-hover:text-purple-300 transition-colors line-clamp-1 mb-1">
                         {task.title}
                       </h5>
 
-                      {task.cloudResource && (
+                      {task.project && (
                         <div className="flex items-center gap-1 text-[10px] text-slate-400 mb-1">
-                          <Server className="w-3 h-3 text-cyan-400 shrink-0" />
-                          <span className="truncate">{task.cloudResource}</span>
+                          <Folder className="w-3 h-3 text-purple-400 shrink-0" />
+                          <span className="truncate">{task.project}</span>
                         </div>
                       )}
 

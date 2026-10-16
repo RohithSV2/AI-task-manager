@@ -14,8 +14,9 @@ export async function POST(req: NextRequest) {
 
     const updatedTasks = tasks.map(task => {
       let quadrant: EisenhowerQuadrant = task.eisenhowerQuadrant;
-      const isUrgent = task.priority === 'urgent' || (task.dueDate && new Date(task.dueDate).getTime() - Date.now() < 86400000 * 2);
-      const isImportant = task.category === 'Cloud Computing' || task.category === 'Architecture' || task.priority === 'high' || task.priority === 'urgent';
+      const daysUntilDue = task.dueDate ? (new Date(task.dueDate).getTime() - Date.now()) / 86400000 : 5;
+      const isUrgent = task.priority === 'urgent' || daysUntilDue <= 2;
+      const isImportant = task.priority === 'high' || task.priority === 'urgent' || task.category === 'Work' || task.category === 'Study';
 
       if (isUrgent && isImportant) {
         quadrant = 'q1_urgent_important';
@@ -31,11 +32,18 @@ export async function POST(req: NextRequest) {
       const importanceScore = isImportant ? 40 : 15;
       const complexityScore = task.aiComplexityScore || Math.min(95, urgencyScore + importanceScore);
 
+      const quadrantNames: Record<EisenhowerQuadrant, string> = {
+        q1_urgent_important: 'Q1 (Do First)',
+        q2_not_urgent_important: 'Q2 (Schedule / Focus)',
+        q3_urgent_not_important: 'Q3 (Delegate / Quick Win)',
+        q4_not_urgent_not_important: 'Q4 (Backlog / Low Priority)'
+      };
+
       return {
         ...task,
         eisenhowerQuadrant: quadrant,
         aiComplexityScore: complexityScore,
-        aiInsight: `Auto-prioritized: Placed into ${quadrant.replace('q1_', 'Q1: ').replace('q2_', 'Q2: ').replace('q3_', 'Q3: ').replace('q4_', 'Q4: ')}. Focus on Q1 tasks first.`
+        aiInsight: `Auto-sorted into ${quadrantNames[quadrant]}. Tackle high-leverage Q1 and Q2 items first.`
       };
     });
 

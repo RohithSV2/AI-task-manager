@@ -1,98 +1,67 @@
-# 🚀 CloudTask AI - Cloud-Native AI Task Management Platform
+# 🚀 TaskMaster AI - Intelligent Task Management & Planning Platform
 
 [![CI/CD Pipeline](https://github.com/RohithSV2/AI-task-manager/actions/workflows/deploy.yml/badge.svg)](https://github.com/RohithSV2/AI-task-manager/actions/workflows/deploy.yml)
 [![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-000000?style=flat&logo=vercel&logoColor=white)](https://ai-task-manager-nine-eta.vercel.app)
-[![AWS Serverless Ready](https://img.shields.io/badge/AWS-Serverless%20Architecture-FF9900?style=flat&logo=amazon-aws&logoColor=white)](./CLOUD_ARCHITECTURE.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Next.js 14](https://img.shields.io/badge/Next.js-14.2-black?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
 **Live Production Deployment:** [https://ai-task-manager-nine-eta.vercel.app](https://ai-task-manager-nine-eta.vercel.app)  
 **GitHub Repository:** [https://github.com/RohithSV2/AI-task-manager](https://github.com/RohithSV2/AI-task-manager)
 
-An enterprise-grade, cloud-native **AI Task Management Platform** engineered specifically for **Cloud Computing & DevOps** projects. Features serverless microservices, Google Gemini LLM prompt engineering, Eisenhower Matrix auto-prioritization, real-time cloud telemetry observability, and automated GitHub Actions CI/CD to Vercel.
+**TaskMaster AI** is an intelligent, modern task management application built for individuals, students, developers, and teams. It pairs a sleek Kanban and Eisenhower Matrix workflow with AI-driven natural language task creation, automated subtask breakdowns, intelligent urgency prioritization, and personal productivity coaching.
 
 ---
 
 ## 🌟 Key Features
 
-### 1. 🤖 Intelligent Cloud AI Engine
-- **Natural Language & Voice Parser**: Type natural prompts like *"Deploy Redis cluster on AWS EC2 by tomorrow 6pm with high priority and 3 subtasks"* — the AI automatically parses title, priority, category, estimated duration, target cloud resource, and sub-phases.
-- **Automated Milestone Decomposition**: Generates multi-phase cloud subtasks with balanced engineering minute estimates using Google Gemini 1.5 Flash.
-- **Eisenhower Matrix Auto-Prioritization**: Classifies tasks across 4 quadrants (*Q1: Do First*, *Q2: Schedule*, *Q3: Delegate*, *Q4: Eliminate*) based on algorithmic urgency-importance matrices.
-- **AI Task Copilot**: Real-time floating assistant for daily cloud standup briefings, sprint optimization, and bottleneck detection.
+### 1. 🤖 Smart AI Task Engine
+- **Natural Language & Voice Input**: Type tasks in plain English like *"Prepare investor slide deck by Friday 3pm with high priority and 3 subtasks"* or *"Schedule dental checkup tomorrow morning"*. The AI automatically extracts the task title, category, priority, due date, estimated duration, and sub-actions.
+- **Automated Milestone Breakdown**: Complex projects can be decomposed with a single click into manageable, time-estimated subtasks.
+- **Eisenhower Matrix Auto-Sorting**: Automatically evaluates tasks across 4 focus quadrants (*Q1: Do First*, *Q2: Schedule / Focus*, *Q3: Delegate / Quick Wins*, *Q4: Eliminate*) to maximize daily output.
+- **AI Task Copilot**: An interactive productivity assistant for daily standup briefings, sprint planning, and actionable time-management advice.
 
-### 2. ⚡ Serverless Microservices Architecture
-- Built on **Next.js 14 App Router** with decoupled serverless API routes (`/api/tasks`, `/api/ai/*`, `/api/cloud-telemetry`).
-- Instant auto-scaling from 0 to thousands of concurrent requests with **zero idle server cost**.
-- Deployed across **Vercel Global Anycast Edge Network** with primary region `iad1` (US East 1, AWS backbone).
+### 2. 📋 Flexible Task Management Views
+- **Kanban Board**: Drag-and-drop / 1-click status transitions across 5 columns (*Backlog*, *To Do*, *In Progress*, *Review*, *Completed*).
+- **Eisenhower Decision Matrix**: Visual 2x2 grid sorting tasks by urgency and importance.
+- **Productivity Analytics**: Real-time velocity tracking, completion percentages, time logging, and category distribution charts.
 
-### 3. 📊 Real-Time Cloud Telemetry & Observability
-- **Live Latency & Memory Metrics**: Displays sub-30ms execution latencies, active edge regions, and memory footprints.
-- **Live CloudWatch / Serverless Logs Stream**: Real-time terminal log viewer simulating CloudWatch runtime events, cache hit ratios, and security WAF inspections.
-- **Architecture Flow Visualizer**: Visual interactive mapping of all 5 cloud tiers.
-
-### 4. 🛠️ DevOps & Multi-Cloud Readiness
-- **Automated CI/CD**: Full GitHub Actions pipeline (`.github/workflows/deploy.yml`) executing linting, TypeScript compilation, and deployment tests on every Git push.
-- **Infrastructure as Code (IaC)**: Terraform manifests (`infrastructure/terraform/main.tf`) for provisioning AWS DynamoDB, S3 artifact buckets, and CloudWatch log groups.
-- **Containerization**: Multi-stage `Dockerfile` and `docker-compose.yml` for multi-cloud deployment portability.
-
----
-
-## 🏗️ 5-Tier Cloud Architecture
-
-```
-[ Client Browser ]
-        │
-        ▼ (Anycast TLS 1.3)
-┌─────────────────────────────────────────────────────────────┐
-│ Tier 1: Vercel Anycast Edge Network / AWS CloudFront        │
-└──────────────────────────────┬──────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│ Tier 2: Serverless Microservices (Next.js 14 / AWS Lambda) │
-│   • /api/tasks • /api/ai/parse • /api/cloud-telemetry       │
-└──────────────┬───────────────────────────────┬──────────────┘
-               │                               │
-               ▼                               ▼
-┌─────────────────────────────┐ ┌─────────────────────────────┐
-│ Tier 3: AI Inference Engine │ │ Tier 4: Storage & Caching   │
-│   • Google Gemini Cloud LLM │ │   • LocalStorage + REST Sync│
-│   • Heuristic NLP Fallback  │ │   • AWS S3 & DynamoDB Ready │
-└─────────────────────────────┘ └─────────────────────────────┘
-                               ▲
-                               │
-┌─────────────────────────────────────────────────────────────┐
-│ Tier 5: DevOps CI/CD & IaC                                  │
-│   • GitHub Actions • Terraform HCL • Docker Container       │
-└─────────────────────────────────────────────────────────────┘
-```
-
-> 📖 **Full Architectural Specification**: See [CLOUD_ARCHITECTURE.md](./CLOUD_ARCHITECTURE.md) for detailed AWS service mappings, SLA calculations, and security policies.
+### 3. 🎯 Versatile Categories
+Built for all aspects of daily life and work:
+- 💼 **Work**: Strategic goals, meetings, client deliverables.
+- 💻 **Development**: Code refactoring, bug fixes, features.
+- 🎨 **Design**: UI/UX wireframes, branding, prototypes.
+- 📚 **Study**: Exam preparation, assignments, reading.
+- 🏃 **Health**: Fitness routines, workouts, wellness.
+- 👤 **Personal**: Travel plans, home errands, leisure.
 
 ---
 
-## 🚀 Quick Start (Local Development)
+## 🛠️ Tech Stack
 
-### Prerequisites
-- Node.js 20.x or higher
-- npm 10.x or higher
+- **Frontend**: Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS, Lucide Icons, Canvas Confetti.
+- **Backend & APIs**: Next.js Serverless Route Handlers (`/api/tasks`, `/api/ai/parse`, `/api/ai/breakdown`, `/api/ai/prioritize`, `/api/ai/chat`).
+- **AI Engine**: Google Gemini 1.5 Flash API with built-in heuristic rule-based fallback for 100% offline reliability.
+- **State & Storage**: Client-side LocalStorage persistence with Serverless REST datastore synchronization.
+- **Deployment & CI/CD**: Vercel Edge Serverless Deployment + GitHub Actions CI/CD pipeline.
 
-### Installation
+---
+
+## 🚀 Getting Started (Local Development)
 
 ```bash
-# Clone the repository
+# 1. Clone the repository
 git clone https://github.com/RohithSV2/AI-task-manager.git
 cd AI-task-manager
 
-# Install dependencies
+# 2. Install dependencies
 npm install
 
-# (Optional) Add your Google Gemini API Key in .env.local
-# If omitted, the platform uses its built-in serverless heuristic AI engine
+# 3. (Optional) Configure Gemini API Key
+# If omitted, the app uses its built-in heuristic AI engine
 echo "GEMINI_API_KEY=your_key_here" > .env.local
 
-# Start the local development server
+# 4. Start the development server
 npm run dev
 ```
 
@@ -100,37 +69,18 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## ☁️ Deployment to Vercel
+## ☁️ Deployment
 
-### Automatic Git Push Deployment
-Pushing to the `main` branch automatically deploys the application via Vercel GitHub integration and triggers the GitHub Actions workflow.
-
+### Push to GitHub (Automated Vercel Deployment)
 ```bash
 git add .
-git commit -m "feat: enhance cloud serverless AI task management"
+git commit -m "feat: enhance AI task manager"
 git push origin main
 ```
 
-### Manual CLI Deployment
-
-```bash
-npx vercel --prod
-```
-
----
-
-## 📋 Evaluation Rubric Alignment (Cloud Computing Project)
-
-| Rubric Requirement | How CloudTask AI Fulfills It |
-| :--- | :--- |
-| **Cloud-Native Design** | Deployed on Vercel Serverless / AWS Lambda; zero fixed server instances. |
-| **Scalability & Elasticity** | Stateless microservices scale on-demand; Anycast edge caching. |
-| **AI Integration** | Google Gemini 1.5 Flash API with prompt schemas and heuristic fallbacks. |
-| **Observability** | `/api/cloud-telemetry` provides live latency, memory, and CloudWatch log streams. |
-| **DevOps & CI/CD** | Automated GitHub Actions workflow on Git push + Terraform multi-cloud IaC. |
-| **Fault Tolerance** | Automatic offline localStorage persistence with instant recovery. |
+Every push to `main` automatically triggers deployment on Vercel and runs the GitHub Actions test workflow.
 
 ---
 
 ## 📜 License
-Distributed under the MIT License. Developed for Academic Cloud Computing Project Evaluation.
+Distributed under the MIT License.

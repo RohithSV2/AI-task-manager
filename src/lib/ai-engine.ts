@@ -10,7 +10,7 @@ export interface AIParsedTaskResult {
   estimatedHours: number;
   subtasks: { title: string; estimatedMinutes: number }[];
   tags: string[];
-  cloudResource: string;
+  project?: string;
   eisenhowerQuadrant: EisenhowerQuadrant;
   aiComplexityScore: number;
   aiInsight: string;
@@ -18,21 +18,21 @@ export interface AIParsedTaskResult {
 
 export async function parseWithGemini(prompt: string, apiKey: string): Promise<AIParsedTaskResult | null> {
   try {
-    const systemPrompt = `You are an AI Task Architect specialized in Cloud Computing, DevOps, and Full-Stack Engineering.
-Extract task details from the following user prompt and respond ONLY with a raw JSON object (no markdown, no backticks):
+    const systemPrompt = `You are a smart AI Personal Productivity Assistant and Task Planner.
+Extract structured task details from the user prompt and respond ONLY with a raw JSON object (no markdown, no backticks):
 {
-  "title": "string",
-  "description": "string",
+  "title": "string (clear, actionable task title)",
+  "description": "string (brief summary of objectives)",
   "priority": "low" | "medium" | "high" | "urgent",
-  "category": "Cloud Computing" | "DevOps" | "AI & ML" | "Architecture" | "General",
+  "category": "Work" | "Personal" | "Development" | "Design" | "Study" | "Health",
   "dueDate": "YYYY-MM-DD",
   "estimatedHours": number,
   "subtasks": [{"title": "string", "estimatedMinutes": number}],
   "tags": ["string"],
-  "cloudResource": "string (e.g. AWS Lambda, S3, Vercel Edge, DynamoDB)",
+  "project": "string",
   "eisenhowerQuadrant": "q1_urgent_important" | "q2_not_urgent_important" | "q3_urgent_not_important" | "q4_not_urgent_not_important",
   "aiComplexityScore": number (1-100),
-  "aiInsight": "string"
+  "aiInsight": "string (practical tip or recommendation)"
 }`;
 
     const response = await fetch(
@@ -79,15 +79,17 @@ export function parseWithHeuristics(input: string): AIParsedTaskResult {
   }
 
   // Category detection
-  let category: TaskCategory = 'Cloud Computing';
-  if (lower.includes('devops') || lower.includes('ci/cd') || lower.includes('pipeline') || lower.includes('docker') || lower.includes('github action')) {
-    category = 'DevOps';
-  } else if (lower.includes('ai') || lower.includes('ml') || lower.includes('llm') || lower.includes('model') || lower.includes('prompt') || lower.includes('nlp')) {
-    category = 'AI & ML';
-  } else if (lower.includes('architect') || lower.includes('design') || lower.includes('system') || lower.includes('diagram') || lower.includes('terraform')) {
-    category = 'Architecture';
-  } else if (lower.includes('personal') || lower.includes('study') || lower.includes('exam') || lower.includes('gym')) {
-    category = 'General';
+  let category: TaskCategory = 'Work';
+  if (lower.includes('study') || lower.includes('exam') || lower.includes('homework') || lower.includes('course') || lower.includes('assignment') || lower.includes('read') || lower.includes('learn')) {
+    category = 'Study';
+  } else if (lower.includes('workout') || lower.includes('gym') || lower.includes('run') || lower.includes('health') || lower.includes('cardio') || lower.includes('diet') || lower.includes('meditation')) {
+    category = 'Health';
+  } else if (lower.includes('design') || lower.includes('figma') || lower.includes('ui') || lower.includes('ux') || lower.includes('logo') || lower.includes('wireframe')) {
+    category = 'Design';
+  } else if (lower.includes('code') || lower.includes('bug') || lower.includes('api') || lower.includes('dev') || lower.includes('app') || lower.includes('git') || lower.includes('database')) {
+    category = 'Development';
+  } else if (lower.includes('home') || lower.includes('buy') || lower.includes('grocery') || lower.includes('trip') || lower.includes('vacation') || lower.includes('family') || lower.includes('personal')) {
+    category = 'Personal';
   }
 
   // Due date detection
@@ -97,6 +99,7 @@ export function parseWithHeuristics(input: string): AIParsedTaskResult {
   else if (lower.includes('tomorrow')) daysToAdd = 1;
   else if (lower.includes('friday')) daysToAdd = ((5 - now.getDay() + 7) % 7) || 7;
   else if (lower.includes('monday')) daysToAdd = ((1 - now.getDay() + 7) % 7) || 7;
+  else if (lower.includes('weekend')) daysToAdd = ((6 - now.getDay() + 7) % 7) || 7;
   else if (lower.includes('next week')) daysToAdd = 7;
   else if (lower.includes('in 3 days')) daysToAdd = 3;
   else if (lower.includes('in 5 days')) daysToAdd = 5;
@@ -105,19 +108,19 @@ export function parseWithHeuristics(input: string): AIParsedTaskResult {
   const dueDate = targetDate.toISOString().split('T')[0];
 
   // Hours estimation
-  let estimatedHours = 4;
+  let estimatedHours = 3;
   const hourMatch = lower.match(/(\d+)\s*(?:hour|hr|h\b)/);
   if (hourMatch) {
     estimatedHours = parseInt(hourMatch[1], 10);
   } else if (priority === 'urgent') {
-    estimatedHours = 6;
+    estimatedHours = 4;
   } else if (priority === 'low') {
-    estimatedHours = 2;
+    estimatedHours = 1.5;
   }
 
   // Title formatting
   const cleanTitle = input
-    .replace(/(urgent|asap|critical|high priority|by friday|by tomorrow|today|in \d+ days)/gi, '')
+    .replace(/(urgent|asap|critical|high priority|by friday|by tomorrow|today|in \d+ days|by monday|by tonight)/gi, '')
     .trim()
     .replace(/^[-*•\s]+/, '');
 
@@ -125,22 +128,25 @@ export function parseWithHeuristics(input: string): AIParsedTaskResult {
     ? cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1)
     : input.charAt(0).toUpperCase() + input.slice(1);
 
-  // Tags & Cloud Resource
-  const tags: string[] = ['Cloud'];
-  let cloudResource = 'Vercel Serverless Function';
+  // Tags & Project
+  const tags: string[] = [category];
+  let project = `${category} Tasks`;
 
-  if (category === 'DevOps') {
-    tags.push('CI/CD', 'GitHub');
-    cloudResource = 'GitHub Actions / Vercel Deploy Hooks';
-  } else if (category === 'AI & ML') {
-    tags.push('Gemini AI', 'Inference');
-    cloudResource = 'Gemini Cloud LLM API';
-  } else if (category === 'Architecture') {
-    tags.push('IaC', 'Terraform');
-    cloudResource = 'AWS CloudFront / API Gateway';
-  } else {
-    tags.push('Serverless', 'Microservices');
-    cloudResource = 'AWS Lambda / Vercel Edge';
+  if (category === 'Development') {
+    tags.push('Engineering');
+    project = 'Product Development';
+  } else if (category === 'Design') {
+    tags.push('UI/UX');
+    project = 'Product Design';
+  } else if (category === 'Study') {
+    tags.push('Learning');
+    project = 'Academics';
+  } else if (category === 'Health') {
+    tags.push('Wellness');
+    project = 'Fitness & Routine';
+  } else if (category === 'Work') {
+    tags.push('Productivity');
+    project = 'Quarterly Goals';
   }
 
   // Eisenhower Matrix
@@ -157,24 +163,24 @@ export function parseWithHeuristics(input: string): AIParsedTaskResult {
 
   // Subtasks generation
   const subtasks = [
-    { title: `Initialize environment and specifications for ${title.slice(0, 30)}`, estimatedMinutes: 45 },
-    { title: `Develop core implementation and serverless logic`, estimatedMinutes: 90 },
-    { title: `Perform cloud benchmark and integration testing`, estimatedMinutes: 45 }
+    { title: `Prepare materials and outline approach for ${title.slice(0, 30)}`, estimatedMinutes: 30 },
+    { title: `Execute core work and main deliverables`, estimatedMinutes: 60 },
+    { title: `Review results, refine details, and finalize`, estimatedMinutes: 30 }
   ];
 
-  const aiComplexityScore = Math.min(95, Math.max(30, estimatedHours * 12 + (priority === 'urgent' ? 25 : 10)));
-  const aiInsight = `AI Analysis: Rated complexity ${aiComplexityScore}/100. Best executed in ${cloudResource} with automated scaling policies.`;
+  const aiComplexityScore = Math.min(95, Math.max(25, estimatedHours * 15 + (priority === 'urgent' ? 20 : 5)));
+  const aiInsight = `AI Suggestion: Break this down into 45-minute focused focus sessions to maintain high cognitive momentum.`;
 
   return {
     title,
-    description: `Task created via AI Natural Language Engine. Target cloud resource: ${cloudResource}.`,
+    description: `Created with AI Natural Language Engine. Target category: ${category}.`,
     priority,
     category,
     dueDate,
     estimatedHours,
     subtasks,
     tags,
-    cloudResource,
+    project,
     eisenhowerQuadrant,
     aiComplexityScore,
     aiInsight
@@ -182,24 +188,44 @@ export function parseWithHeuristics(input: string): AIParsedTaskResult {
 }
 
 export function generateSmartSubtasks(title: string, category: TaskCategory): Subtask[] {
-  return [
-    {
-      id: generateId(),
-      title: `Step 1: Architectural design and requirement mapping for ${title.slice(0, 35)}`,
-      completed: false,
-      estimatedMinutes: 45
-    },
-    {
-      id: generateId(),
-      title: `Step 2: Serverless implementation & API endpoint integration`,
-      completed: false,
-      estimatedMinutes: 90
-    },
-    {
-      id: generateId(),
-      title: `Step 3: Verification, latency benchmark, and cloud deployment validation`,
-      completed: false,
-      estimatedMinutes: 45
-    }
-  ];
+  let steps: string[] = [];
+
+  if (category === 'Study') {
+    steps = [
+      `Review core syllabus concepts & lecture notes for ${title.slice(0, 30)}`,
+      `Create high-yield revision summary sheet or flashcards`,
+      `Solve practice questions and test understanding under timed conditions`
+    ];
+  } else if (category === 'Design') {
+    steps = [
+      `Gather visual inspiration and competitor benchmark examples`,
+      `Create wireframes and layout structures in design tool`,
+      `Refine typography, colors, interactions, and review with team`
+    ];
+  } else if (category === 'Development') {
+    steps = [
+      `Define technical architecture, schema, and API contracts`,
+      `Implement feature logic, edge-case handling, and error states`,
+      `Write unit tests and perform peer code review`
+    ];
+  } else if (category === 'Health') {
+    steps = [
+      `Set up equipment, warm up dynamically, and hydrate`,
+      `Complete main workout or activity routine with target intensity`,
+      `Post-workout cool down, stretching, and nutrition log`
+    ];
+  } else {
+    steps = [
+      `Phase 1: Clarify objectives, constraints, and gather requirements`,
+      `Phase 2: Complete the primary deliverables and draft solutions`,
+      `Phase 3: Polish, review with stakeholders, and confirm completion`
+    ];
+  }
+
+  return steps.map((s, idx) => ({
+    id: generateId(),
+    title: s,
+    completed: false,
+    estimatedMinutes: idx === 1 ? 60 : 30
+  }));
 }

@@ -3,16 +3,15 @@ import { initialTasks } from '@/lib/default-tasks';
 import { Task } from '@/types';
 import { generateId } from '@/lib/utils';
 
-// In-memory runtime cache for serverless invocation demonstration
-let serverlessTasksStore: Task[] = [...initialTasks];
+// Runtime store for API simulation
+let inMemoryTasks: Task[] = [...initialTasks];
 
 export async function GET() {
   return NextResponse.json({
     success: true,
-    tasks: serverlessTasksStore,
-    total: serverlessTasksStore.length,
-    timestamp: new Date().toISOString(),
-    cloudRegion: process.env.VERCEL_REGION || 'iad1 (AWS us-east-1)'
+    tasks: inMemoryTasks,
+    total: inMemoryTasks.length,
+    timestamp: new Date().toISOString()
   });
 }
 
@@ -25,27 +24,26 @@ export async function POST(req: NextRequest) {
       description: data.description || '',
       priority: data.priority || 'medium',
       status: data.status || 'todo',
-      category: data.category || 'Cloud Computing',
+      category: data.category || 'Work',
       dueDate: data.dueDate || new Date().toISOString().split('T')[0],
       estimatedHours: Number(data.estimatedHours) || 2,
       actualHours: Number(data.actualHours) || 0,
       subtasks: Array.isArray(data.subtasks) ? data.subtasks : [],
-      tags: Array.isArray(data.tags) ? data.tags : ['Cloud'],
-      cloudResource: data.cloudResource || 'AWS Lambda / Vercel Edge',
+      tags: Array.isArray(data.tags) ? data.tags : ['General'],
+      project: data.project || 'General Tasks',
       eisenhowerQuadrant: data.eisenhowerQuadrant || 'q2_not_urgent_important',
       aiSuggested: Boolean(data.aiSuggested),
       aiComplexityScore: data.aiComplexityScore || 50,
-      aiInsight: data.aiInsight || 'Created via Serverless API',
+      aiInsight: data.aiInsight || 'Created via Task API',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
 
-    serverlessTasksStore.unshift(newTask);
+    inMemoryTasks.unshift(newTask);
 
     return NextResponse.json({
       success: true,
-      task: newTask,
-      message: 'Task created on Cloud Serverless Datastore'
+      task: newTask
     }, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error?.message || 'Failed to create task' }, { status: 400 });
@@ -61,20 +59,20 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Task ID is required' }, { status: 400 });
     }
 
-    const index = serverlessTasksStore.findIndex(t => t.id === id);
+    const index = inMemoryTasks.findIndex(t => t.id === id);
     if (index === -1) {
       return NextResponse.json({ error: 'Task not found' }, { status: 404 });
     }
 
-    serverlessTasksStore[index] = {
-      ...serverlessTasksStore[index],
+    inMemoryTasks[index] = {
+      ...inMemoryTasks[index],
       ...updates,
       updatedAt: new Date().toISOString()
     };
 
     return NextResponse.json({
       success: true,
-      task: serverlessTasksStore[index]
+      task: inMemoryTasks[index]
     });
   } catch (error: any) {
     return NextResponse.json({ error: error?.message || 'Failed to update task' }, { status: 400 });
@@ -90,13 +88,11 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: 'Task ID query param is required' }, { status: 400 });
     }
 
-    const initialLength = serverlessTasksStore.length;
-    serverlessTasksStore = serverlessTasksStore.filter(t => t.id !== id);
+    inMemoryTasks = inMemoryTasks.filter(t => t.id !== id);
 
     return NextResponse.json({
       success: true,
-      deletedId: id,
-      count: initialLength - serverlessTasksStore.length
+      deletedId: id
     });
   } catch (error: any) {
     return NextResponse.json({ error: error?.message || 'Failed to delete task' }, { status: 400 });
